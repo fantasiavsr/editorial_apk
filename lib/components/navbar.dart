@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../main.dart';
+import '../pages/product_page.dart';
+import '../pages/main_page.dart';
 
 class Navbar extends StatefulWidget {
   final String title;
@@ -74,7 +76,14 @@ class _NavbarState extends State<Navbar> {
                     children: widget.links.map((l) => ListTile(
                       title: Text(l, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: fg)),
                       dense: true, contentPadding: EdgeInsets.zero,
-                      onTap: () => setState(() => _open = false),
+                      onTap: () {
+                        setState(() => _open = false);
+                        if (l == 'Home') {
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const MainPage()), (r) => false);
+                        } else if (l == 'Products') {
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => const ProductPage()));
+                        }
+                      },
                     )).toList(),
                   ),
                 ),
