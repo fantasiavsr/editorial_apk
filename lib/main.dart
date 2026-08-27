@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'pages/main_page.dart';
 
 // Brand colors from editorial-web @theme tokens
@@ -14,11 +15,17 @@ void main() => runApp(const EditorialApp());
 class AppTheme {
   static final light = ThemeData(
     scaffoldBackgroundColor: kWhite,
-    colorScheme: ColorScheme.fromSeed(seedColor: kOrange, brightness: Brightness.light),
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: kOrange,
+      brightness: Brightness.light,
+    ),
   );
   static final dark = ThemeData(
     scaffoldBackgroundColor: kDarkBg,
-    colorScheme: ColorScheme.fromSeed(seedColor: kOrange, brightness: Brightness.dark),
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: kOrange,
+      brightness: Brightness.dark,
+    ),
   );
 }
 
@@ -27,9 +34,15 @@ class ThemeState extends InheritedWidget {
   final bool isDark;
   final VoidCallback toggle;
 
-  const ThemeState({super.key, required this.isDark, required this.toggle, required super.child});
+  const ThemeState({
+    super.key,
+    required this.isDark,
+    required this.toggle,
+    required super.child,
+  });
 
-  static ThemeState of(BuildContext context) => context.dependOnInheritedWidgetOfExactType<ThemeState>()!;
+  static ThemeState of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<ThemeState>()!;
 
   @override
   bool updateShouldNotify(ThemeState old) => isDark != old.isDark;
@@ -47,6 +60,23 @@ class _EditorialAppState extends State<EditorialApp> {
 
   @override
   Widget build(BuildContext context) {
+    // Set status bar style based on theme
+    SystemChrome.setSystemUIOverlayStyle(
+      _isDark
+          ? SystemUiOverlayStyle.dark.copyWith(
+              statusBarColor: Colors.black,
+              statusBarIconBrightness: Brightness.light,
+              systemNavigationBarColor: Colors.black,
+              systemNavigationBarIconBrightness: Brightness.light,
+            )
+          : SystemUiOverlayStyle.light.copyWith(
+              statusBarColor: Colors.white,
+              statusBarIconBrightness: Brightness.dark,
+              systemNavigationBarColor: Colors.white,
+              systemNavigationBarIconBrightness: Brightness.dark,
+            ),
+    );
+
     return ThemeState(
       isDark: _isDark,
       toggle: _toggle,

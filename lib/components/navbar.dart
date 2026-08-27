@@ -39,19 +39,38 @@ class _NavbarState extends State<Navbar> {
           height: 56,
           decoration: BoxDecoration(
             color: bg,
-            border: Border(bottom: BorderSide(color: fg.withValues(alpha: 0.1))),
+            border: Border(
+              bottom: BorderSide(color: fg.withValues(alpha: 0.1)),
+            ),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
-              Expanded(child: Text(widget.title, overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: fg))),
+              Expanded(
+                child: Text(
+                  widget.title,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: fg,
+                  ),
+                ),
+              ),
               IconButton(
-                icon: Icon(dark ? Icons.sunny : Icons.dark_mode, color: dark ? kOrange : fg, size: 22),
+                icon: Icon(
+                  dark ? Icons.sunny : Icons.dark_mode,
+                  color: dark ? kOrange : fg,
+                  size: 22,
+                ),
                 onPressed: ThemeState.of(context).toggle,
               ),
               IconButton(
-                icon: Icon(_open ? Icons.close : Icons.menu, color: fg, size: 22),
+                icon: Icon(
+                  _open ? Icons.close : Icons.menu,
+                  color: fg,
+                  size: 22,
+                ),
                 onPressed: () => setState(() => _open = !_open),
               ),
             ],
@@ -69,22 +88,48 @@ class _NavbarState extends State<Navbar> {
                 elevation: 8,
                 color: bg,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 8,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
-                    children: widget.links.map((l) => ListTile(
-                      title: Text(l, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: fg)),
-                      dense: true, contentPadding: EdgeInsets.zero,
-                      onTap: () {
-                        setState(() => _open = false);
-                        if (l == 'Home') {
-                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const MainPage()), (r) => false);
-                        } else if (l == 'Products') {
-                          Navigator.push(context, MaterialPageRoute(builder: (_) => const ProductPage()));
-                        }
-                      },
-                    )).toList(),
+                    children: widget.links
+                        .map(
+                          (l) => ListTile(
+                            title: Text(
+                              l,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: fg,
+                              ),
+                            ),
+                            dense: true,
+                            contentPadding: EdgeInsets.zero,
+                            onTap: () {
+                              setState(() => _open = false);
+                              if (l == 'Home') {
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const MainPage(),
+                                  ),
+                                  (r) => false,
+                                );
+                              } else if (l == 'Products') {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const ProductPage(),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        )
+                        .toList(),
                   ),
                 ),
               ),
