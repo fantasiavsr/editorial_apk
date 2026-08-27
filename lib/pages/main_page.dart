@@ -128,18 +128,31 @@ class MainPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      const Wrap(
-                        spacing: 12,
-                        runSpacing: 12,
-                        children: [
-                          StudyCard(co: 'Anthropic', ready: true),
-                          StudyCard(co: 'Stripe', ready: true),
-                          StudyCard(co: 'Sierra', ready: true),
-                          StudyCard(co: 'Linear', ready: true),
-                          StudyCard(co: 'Shopify', ready: false),
-                          StudyCard(co: 'Figma', ready: false),
-                          StudyCard(co: 'Notion', ready: false),
-                        ],
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          const spacing = 12.0;
+                          final maxCols = ((constraints.maxWidth + spacing) / 200).floor().clamp(2, 4);
+                          final cards = const [
+                            StudyCard(co: 'Anthropic', ready: true),
+                            StudyCard(co: 'Stripe', ready: true),
+                            StudyCard(co: 'Sierra', ready: true),
+                            StudyCard(co: 'Linear', ready: true),
+                            StudyCard(co: 'Shopify', ready: false),
+                            StudyCard(co: 'Figma', ready: false),
+                            StudyCard(co: 'Notion', ready: false),
+                          ];
+                          final rows = <Widget>[];
+                          for (var i = 0; i < cards.length; i += maxCols) {
+                            final row = <Widget>[];
+                            for (var j = 0; j < maxCols && i + j < cards.length; j++) {
+                              row.add(Expanded(child: cards[i + j]));
+                              if (j < maxCols - 1) row.add(const SizedBox(width: spacing));
+                            }
+                            rows.add(Row(children: row));
+                            if (i + maxCols < cards.length) rows.add(const SizedBox(height: spacing));
+                          }
+                          return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: rows);
+                        },
                       ),
                     ],
                   ),
