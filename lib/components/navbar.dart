@@ -12,6 +12,7 @@ class Navbar extends StatefulWidget {
 }
 
 class _NavbarState extends State<Navbar> {
+  final _layerLink = LayerLink();
   bool _open = false;
   final _controller = OverlayPortalController();
 
@@ -35,55 +36,58 @@ class _NavbarState extends State<Navbar> {
 
     return Stack(
       children: [
-        Container(
-          height: 56,
-          decoration: BoxDecoration(
-            color: bg,
-            border: Border(
-              bottom: BorderSide(color: fg.withValues(alpha: 0.1)),
+        CompositedTransformTarget(
+          link: _layerLink,
+          child: Container(
+            height: 56,
+            decoration: BoxDecoration(
+              color: bg,
+              border: Border(
+                bottom: BorderSide(color: fg.withValues(alpha: 0.1)),
+              ),
             ),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  widget.title,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    color: fg,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    widget.title,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: fg,
+                    ),
                   ),
                 ),
-              ),
-              IconButton(
-                icon: Icon(
-                  dark ? Icons.sunny : Icons.dark_mode,
-                  color: dark ? kOrange : fg,
-                  size: 22,
+                IconButton(
+                  icon: Icon(
+                    dark ? Icons.sunny : Icons.dark_mode,
+                    color: dark ? kOrange : fg,
+                    size: 22,
+                  ),
+                  onPressed: ThemeState.of(context).toggle,
                 ),
-                onPressed: ThemeState.of(context).toggle,
-              ),
-              IconButton(
-                icon: Icon(
-                  _open ? Icons.close : Icons.menu,
-                  color: fg,
-                  size: 22,
+                IconButton(
+                  icon: Icon(
+                    _open ? Icons.close : Icons.menu,
+                    color: fg,
+                    size: 22,
+                  ),
+                  onPressed: () => setState(() => _open = !_open),
                 ),
-                onPressed: () => setState(() => _open = !_open),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         OverlayPortal(
           controller: _controller,
           overlayChildBuilder: (context) {
             if (!_open) return const SizedBox.shrink();
-            return Positioned(
-              top: 56,
-              left: 0,
-              right: 0,
+            return CompositedTransformFollower(
+              link: _layerLink,
+              offset: const Offset(0, 56),
+              showWhenUnlinked: false,
               child: Material(
                 elevation: 8,
                 color: bg,
